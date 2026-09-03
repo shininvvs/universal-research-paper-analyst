@@ -1,16 +1,30 @@
-# universal-research-paper-analyst
+# Universal Research Paper Analyst
 
-분야를 가리지 않는 **논문 · 구현 코드 분석** Claude Code 스킬.
+A Claude Code skill for understanding research papers **and their implementation code** — in any discipline.
 
-논문 하나를 "요약"하는 게 아니라 **이해**하게 만드는 것이 목적이다.
-연구 질문 → 선행연구 → 핵심 아이디어 → 방법 → 수식 → 실험 → 한계 → 구현 코드까지
-하나로 잇고, 저장소가 있으면 실제 실행 흐름을 추적해 논문 개념과 짝지어 준다.
+The goal is not to summarize a paper. It is to get you from *"I read it"* to
+*"I understand the method, I can follow the code, I could reproduce it, and I can see what is weak."*
 
-## 설치
+It connects the whole chain — research question → prior work → core idea → method → equations →
+figures → experiments → limitations → implementation — and when a repository is available, it traces
+the **actual execution flow** and maps paper concepts onto real code.
 
-### 방법 1 — 개인 스킬로 clone (권장)
+## Install
 
-어느 디렉터리에서 작업하든 쓸 수 있고, `git pull` 로 갱신된다.
+### Option 1 — Plugin marketplace (recommended)
+
+Inside Claude Code:
+
+```
+/plugin marketplace add shininvvs/universal-research-paper-analyst
+/plugin install universal-research-paper-analyst@shininvvs
+```
+
+You get updates with `/plugin marketplace update`.
+
+### Option 2 — Clone as a personal skill
+
+Available in every directory, updatable with `git pull`.
 
 ```bash
 mkdir -p ~/.claude/skills
@@ -18,7 +32,7 @@ git clone https://github.com/shininvvs/universal-research-paper-analyst.git \
   ~/.claude/skills/universal-research-paper-analyst
 ```
 
-### 방법 2 — 파일만 복사
+### Option 3 — Single file
 
 ```bash
 mkdir -p ~/.claude/skills/universal-research-paper-analyst
@@ -26,49 +40,75 @@ curl -fsSL https://raw.githubusercontent.com/shininvvs/universal-research-paper-
   -o ~/.claude/skills/universal-research-paper-analyst/SKILL.md
 ```
 
-### 방법 3 — 특정 프로젝트에서만
+### Option 4 — Project-scoped
 
-프로젝트 저장소 안에 두면 그 저장소에서 일할 때만 적용된다. 팀원은 clone 만 하면 된다.
+Drop it into a repository so it applies only when working there. Teammates just clone.
 
 ```bash
-mkdir -p <프로젝트>/.claude/skills/universal-research-paper-analyst
-cp SKILL.md <프로젝트>/.claude/skills/universal-research-paper-analyst/
+mkdir -p <your-project>/.claude/skills/universal-research-paper-analyst
+cp SKILL.md <your-project>/.claude/skills/universal-research-paper-analyst/
 ```
 
-설치 후 **Claude Code 를 새로 켜야** 목록에 잡힌다. 세션 시작 시점에 스킬을 읽기 때문이다.
+> **Restart Claude Code after installing.** Skills are read at session start.
 
-## 쓰는 법
+## Usage
 
-새 세션에서 `/universal-research-paper-analyst` 로 직접 부르거나,
-논문이나 저장소 분석을 시키면 알아서 불러온다.
+Invoke it directly with `/universal-research-paper-analyst`, or just ask — it loads on its own when
+you are analyzing a paper or a repository.
 
 ```
-이 논문 분석해줘: https://arxiv.org/abs/XXXX.XXXXX
-이 저장소가 논문의 어느 수식을 어디서 구현하는지 짚어줘
-Figure 3 이 뭘 보여주는 건지 데이터 흐름으로 설명해줘
-이거 재현하려면 뭐부터 해야 해?
+Analyze this paper: https://arxiv.org/abs/XXXX.XXXXX
+Which equation does this repo implement, and where?
+Explain Figure 3 as a data flow, not as a picture
+What do I need to run this myself?
+Where would I modify the code to test my own idea?
+How does this paper differ from <other paper>?
 ```
 
-## 이 스킬이 지키는 원칙
+## What it does differently
 
-- **위에서 아래로.** 코드를 첫 줄부터 읽는 것으로 시작하지 않는다.
-  연구 문제 → 핵심 아이디어 → 구조 → 세부 기제 → 수식 → 실험 → 구현 순서로 내려간다.
-- **근거를 구분한다.** `논문에 쓰여 있음` / `코드가 실제로 그렇게 함` / `합리적 추론` / `모름`
-  을 갈라 놓는다. 추론을 사실로 바꾸지 않는다.
-- **논문과 구현이 같다고 가정하지 않는다.** 공개 코드가 논문과 어긋나는 경우는 흔하다.
-- **표준 부품을 새롭다고 부르지 않는다.** 기여 / 엔지니어링 / 기존 기법 재사용을 나눈다.
-- **지어내지 않는다.** 텐서 모양, 저장소 동작, 실험 결과 모두. 모르면 모른다고 한다.
-- **초보자를 압도하지 않는다.** 기본값은 중급 입문자 눈높이, 필요하면 단계적으로 깊어진다.
+**Top-down, never line-by-line first.**
+Research problem → core idea → method structure → detailed mechanism → equations → experiments →
+implementation. Code is read only after you know where it sits in the system. When you ask about a
+function, you first learn why it exists, who calls it, what goes in, and what comes out.
 
-## 구성
+**It separates evidence from inference.**
+Every important claim is labeled: *stated in the paper* / *verified in the code* /
+*reasonable inference* / *unknown*. Inference never gets promoted to fact.
 
-44개 절. 목표 파악(Phase 0)부터 한 문장 요약, 문제 정의, 선행연구, 기여, 구조, 그림,
-수식, 알고리즘, 저장소 구조, 실행 진입점, 데이터 흐름, 텐서 모양 추적, 논문↔코드 대응표,
-학습/추론, 실험, 절제, 한계, 계산량, 재현, 수정 가이드, 연구자 관점, 논문 비교까지.
+**It does not assume the paper and the code agree.**
+Released implementations often diverge from the paper they describe — hardcoded constants, disabled
+terms, inverted masks. The skill checks instead of assuming.
 
-ML/CV/NLP/생성모델/강화학습/그래프/로보틱스/멀티모달/시스템/이론/수학/물리/생물의학까지
-분야별 적응 지침을 포함한다. ML 이 아닌 논문에 ML 식 분석을 강요하지 않는다.
+**It refuses to invent.**
+Tensor shapes, repository behavior, experimental numbers. If a shape depends on runtime
+configuration, it says so rather than guessing.
 
-## 라이선스
+**It does not call standard components novel.**
+Genuine contribution, engineering work, and reused existing technique are kept apart.
+
+**It teaches instead of dumping.**
+Default level is an intermediate beginner. Explanations deepen progressively rather than opening
+with every implementation detail.
+
+## Contents
+
+44 sections covering: goal detection, one-sentence summary, problem definition, prior work, core
+contribution, architecture, figure analysis, equation analysis, algorithms, repository structure,
+execution entry point, data flow, tensor shape tracking, module classification (standard / modified
+/ novel), paper↔code mapping tables, training and inference analysis, experiments, ablations,
+limitations, computational cost, reproduction guides, modification guides, a researcher's critical
+perspective, and structured paper comparison.
+
+Domain adaptations are included for machine learning, computer vision, NLP and LLMs, generative AI,
+reinforcement learning, graph learning, robotics, multimodal AI, systems, algorithms and theory,
+mathematics, physics and natural sciences, and biology and medicine — with an explicit instruction
+not to force ML-style analysis onto non-ML papers.
+
+## Cost
+
+Roughly 138 tokens always-on per session; about 7.5k tokens when the skill actually fires.
+
+## License
 
 MIT

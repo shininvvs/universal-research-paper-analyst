@@ -1,0 +1,24 @@
+{
+  "name": "shininvvs",
+  "owner": {
+    "name": "shininvvs",
+    "url": "https://github.com/shininvvs"
+  },
+  "description": "shininvvs 의 Claude Code 플러그인 모음",
+  "version": "1.0.0",
+  "plugins": [
+    {
+      "name": "universal-research-paper-analyst",
+      "source": ".",
+      "displayName": "Universal Research Paper Analyst",
+      "description": "Analyze research papers and their implementation code top-down across any discipline.",
+      "version": "1.0.0",
+      "author": { "name": "shininvvs" },
+      "homepage": "https://github.com/shininvvs/universal-research-paper-analyst",
+      "repository": "https://github.com/shininvvs/universal-research-paper-analyst",
+      "license": "MIT",
+      "category": "research",
+      "tags": ["research", "paper", "code-analysis", "reproduction"]
+    }
+  ]
+}

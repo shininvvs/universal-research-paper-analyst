@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "universal-research-paper-analyst",
+  "displayName": "Universal Research Paper Analyst",
+  "version": "1.0.0",
+  "description": "Analyze research papers and their implementation code top-down across any discipline. Connects research question, prior work, method, equations, figures, experiments, limitations, and code; traces actual execution flow and maps paper concepts to code.",
+  "author": {
+    "name": "shininvvs",
+    "url": "https://github.com/shininvvs"
+  },
+  "homepage": "https://github.com/shininvvs/universal-research-paper-analyst",
+  "repository": "https://github.com/shininvvs/universal-research-paper-analyst",
+  "license": "MIT",
+  "keywords": ["research", "paper", "code-analysis", "reproduction", "machine-learning", "reading"]
+}
